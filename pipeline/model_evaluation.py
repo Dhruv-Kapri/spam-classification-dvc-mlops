@@ -1,9 +1,10 @@
 import numpy as np
 from typing import Dict
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
+from dvclive.live import Live
 
 
-from pipeline.utils import get_logger, load_model, MODELS_DIR, PROCESSED_DATA_DIR, load_data, save_metrics
+from pipeline.utils import get_logger, load_model, MODELS_DIR, PROCESSED_DATA_DIR, load_data, save_metrics, load_params
 
 
 def evaluate_model(
@@ -50,6 +51,12 @@ def model_evaluation() -> None:
         y_test = test_data.iloc[:, -1].to_numpy()
 
         metrics = evaluate_model(clf, X_test, y_test)
+
+        # Experiment tracking using dvclive
+        with Live(save_dvc_exp=True) as live:
+            for k, v in metrics.items():
+                live.log_metric(k, v)
+            live.log_params(load_params())
 
         save_metrics(metrics, "metrics.json")
 

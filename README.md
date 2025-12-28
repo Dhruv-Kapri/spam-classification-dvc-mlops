@@ -17,6 +17,7 @@ This repository demonstrates a **production-style ML workflow** including:
 - Model evaluation with standard classification metrics
 - Parameterized pipelines using `params.yaml`
 - Automated execution and experiment tracking using **DVC**
+- Experiment tracking and visualization using **dvclive**
 
 <!-- --- -->
 
@@ -49,6 +50,12 @@ This repository demonstrates a **production-style ML workflow** including:
   ├── reports/                         # Evaluation outputs
   │ └── metrics.json
   │
+  ├── dvclive/                         # Experiment tracking & metrics
+  │ ├── params.yaml
+  │ ├── metrics.json
+  │ └── plots/
+  │ └── metrics/
+  │
   ├── experiments/                     # Notebooks / exploratory work
   ├── logs/                            # Per-module log files
   │
@@ -68,7 +75,7 @@ This repository demonstrates a **production-style ML workflow** including:
 2. Data Preprocessing  
 3. Feature Engineering (TF-IDF)  
 4. Model Building  
-5. Model Evaluation  
+5. Model Evaluation (with `dvclive` tracking) 
 
 All stages are automated and reproducible using DVC.
 
@@ -76,25 +83,37 @@ All stages are automated and reproducible using DVC.
 
 ## How to Run
 
-1. Set up venv
+1. Set up venv:
   ```bash
   python -m venv .venv
   source .venv/bin/activate
   ```
 
-2. Install requirements
+2. Install requirements:
   ```bash
   pip install -r requirements.txt
   ```
 
-3. Run project
+3. Run the full pipeline:
   ```bash
   dvc repro
   ```
 
+4. Run experiments
+  ```bash
+  dvc exp run
+  dvc exp show
+  ```
+
 <!-- --- -->
 
-## Experiments
-- Pipeline parameters are controlled via `params.yaml`.
-- Changing parameters and running `dvc repro` or `dvc exp run` creates reproducible experiments.
-
+## Experiments & dvclive
+- Parameters are controlled via `params.yaml` or `dvclive/params.yaml`.
+- Metrics are automatically logged to `dvclive/metrics.json`.
+- Plots of accuracy, precision, recall, and AUC are saved in `dvclive/plots/metrics`.
+- Every `dvc exp run` creates a reproducible experiment with tracked metrics and parameters.
+- Previous experiments can be reproduced or removed with:
+  ```bash
+  dvc exp apply <exp-name>
+  dvc exp remove <exp-name>
+  ```
