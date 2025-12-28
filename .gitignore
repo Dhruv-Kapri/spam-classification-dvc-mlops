@@ -1,3 +1,10 @@
+# Project Specific
+data
+logs
+models
+reports
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

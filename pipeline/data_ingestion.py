@@ -2,10 +2,10 @@ import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 
-from pipeline.utils import get_logger, load_data, preprocess_data, save_data
+from pipeline.utils import get_logger, load_data, clean_schema, save_data
 
 
-def main():
+def data_ingestion():
     logger = get_logger(__file__)
 
     try:
@@ -16,12 +16,13 @@ def main():
         data_path = project_root / "experiments" / "spam.csv"
 
         df = load_data(data_path)
-        final_df = preprocess_data(df)
+        final_df = clean_schema(df)
 
         train_df, test_df = train_test_split(
             final_df,
             test_size=test_size,
-            random_state=2
+            random_state=2,
+            stratify=final_df["target"],
         )
 
         save_data(train_df, "train.csv", sub_folder='raw')
@@ -35,4 +36,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    data_ingestion()

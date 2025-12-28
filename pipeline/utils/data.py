@@ -5,7 +5,7 @@ from typing import Optional
 from pipeline.utils import get_logger
 
 
-def load_data(data_url: str) -> pd.DataFrame:
+def load_data(data_url: str | Path) -> pd.DataFrame:
     """Load data from a CSV file."""
     logger = get_logger(__file__)
 
@@ -23,8 +23,8 @@ def load_data(data_url: str) -> pd.DataFrame:
         raise
 
 
-def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Preprocess the data"""
+def clean_schema(df: pd.DataFrame) -> pd.DataFrame:
+    """Cleans raw dataset schema (column removal/renaming)."""
     logger = get_logger(__file__)
 
     try:
@@ -33,8 +33,9 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
             errors="ignore",
         )
         df = df.rename(
-            columns={'v1': 'Target', 'v2': 'text'},
+            columns={'v1': 'target', 'v2': 'text'},
         )
+        df["text"] = df["text"].astype(str).fillna("")
         logger.debug("Data preprocessing completed")
         return df
 
