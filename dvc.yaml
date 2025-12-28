@@ -4,6 +4,8 @@ stages:
     deps:
       - pipeline/data_ingestion.py
       - pipeline/utils
+    params:
+      - data_ingestion.test_size
     outs:
       - data/raw
   data_preprocessing:
@@ -20,6 +22,8 @@ stages:
       - pipeline/feature_engineering.py
       - pipeline/utils
       - data/interim
+    params:
+      - feature_engineering.max_features
     outs:
       - data/processed
   model_building:
@@ -28,6 +32,9 @@ stages:
       - pipeline/model_building.py
       - pipeline/utils
       - data/processed
+    params:
+      - model_building.n_estimators
+      - model_building.random_state
     outs:
       - models/model.pkl
   model_evaluation:
