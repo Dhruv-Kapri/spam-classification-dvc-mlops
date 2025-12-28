@@ -1,0 +1,109 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python3 -m pipeline.data_ingestion
+    deps:
+    - path: pipeline/data_ingestion.py
+      hash: md5
+      md5: 3fa42ec8dd0f978deb7ef7a86a46d51f
+      size: 986
+    - path: pipeline/utils
+      hash: md5
+      md5: 93844734e17d41db912cb135dcec9aa1.dir
+      size: 16949
+      nfiles: 12
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 0bcb2a8ffe4c9e619579f165f4494f2a.dir
+      size: 479272
+      nfiles: 2
+  data_preprocessing:
+    cmd: python3 -m pipeline.data_preprocessing
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 0bcb2a8ffe4c9e619579f165f4494f2a.dir
+      size: 479272
+      nfiles: 2
+    - path: pipeline/data_preprocessing.py
+      hash: md5
+      md5: 806124b65ba7c125c3397017a7705006
+      size: 3384
+    - path: pipeline/utils
+      hash: md5
+      md5: 93844734e17d41db912cb135dcec9aa1.dir
+      size: 16949
+      nfiles: 12
+    outs:
+    - path: data/interim
+      hash: md5
+      md5: a2fa90a275c9fc7f4e2d9027331db245.dir
+      size: 255940
+      nfiles: 2
+  feature_engineering:
+    cmd: python3 -m pipeline.feature_engineering
+    deps:
+    - path: data/interim
+      hash: md5
+      md5: a2fa90a275c9fc7f4e2d9027331db245.dir
+      size: 255940
+      nfiles: 2
+    - path: pipeline/feature_engineering.py
+      hash: md5
+      md5: 8dca155a2b09093eaa95c3e61ee4e241
+      size: 2145
+    - path: pipeline/utils
+      hash: md5
+      md5: 93844734e17d41db912cb135dcec9aa1.dir
+      size: 16949
+      nfiles: 12
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 82e13fd36af9302c5590805e71b62f6a.dir
+      size: 1177840
+      nfiles: 2
+  model_building:
+    cmd: python3 -m pipeline.model_building
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 82e13fd36af9302c5590805e71b62f6a.dir
+      size: 1177840
+      nfiles: 2
+    - path: pipeline/model_building.py
+      hash: md5
+      md5: bc786252ec0748908c9e68b1833fba4b
+      size: 2007
+    - path: pipeline/utils
+      hash: md5
+      md5: 93844734e17d41db912cb135dcec9aa1.dir
+      size: 16949
+      nfiles: 12
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 03e644612b8aac2dbdb23e459f4a2401
+      size: 925159
+  model_evaluation:
+    cmd: python3 -m pipeline.model_evaluation
+    deps:
+    - path: models/model.pkl
+      hash: md5
+      md5: 03e644612b8aac2dbdb23e459f4a2401
+      size: 925159
+    - path: pipeline/model_evaluation.py
+      hash: md5
+      md5: 4cd8b1003ea716c3c2ed72e9c89bab1a
+      size: 1712
+    - path: pipeline/utils
+      hash: md5
+      md5: 93844734e17d41db912cb135dcec9aa1.dir
+      size: 16949
+      nfiles: 12
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 21b2ea47b6e16cd556c81aecb93556a6
+      size: 140

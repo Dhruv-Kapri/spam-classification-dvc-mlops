@@ -16,8 +16,8 @@ def save_metrics(
     try:
         REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
-        if not metrics_name.endswith(".pkl"):
-            metrics_name += ".pkl"
+        if not metrics_name.endswith(".json"):
+            metrics_name += ".json"
         output_path = REPORTS_DIR / metrics_name
 
         with open(output_path, 'w') as file:

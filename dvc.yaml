@@ -1,0 +1,46 @@
+stages:
+  data_ingestion:
+    cmd: python3 -m pipeline.data_ingestion
+    deps:
+      - pipeline/data_ingestion.py
+      - pipeline/utils
+    outs:
+      - data/raw
+  data_preprocessing:
+    cmd: python3 -m pipeline.data_preprocessing
+    deps:
+      - pipeline/data_preprocessing.py
+      - pipeline/utils
+      - data/raw
+    outs:
+      - data/interim
+  feature_engineering:
+    cmd: python3 -m pipeline.feature_engineering
+    deps:
+      - pipeline/feature_engineering.py
+      - pipeline/utils
+      - data/interim
+    outs:
+      - data/processed
+  model_building:
+    cmd: python3 -m pipeline.model_building
+    deps:
+      - pipeline/model_building.py
+      - pipeline/utils
+      - data/processed
+    outs:
+      - models/model.pkl
+  model_evaluation:
+    cmd: python3 -m pipeline.model_evaluation
+    deps:
+      - pipeline/model_evaluation.py
+      - pipeline/utils
+      - models/model.pkl
+    metrics:
+      - reports/metrics.json
+# params:
+#   -
+# metrics:
+#   -
+# plots:
+#   -
