@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 
-from pipeline.utils import get_logger, load_data, save_model, PROCESSED_DATA_DIR
+from pipeline.utils import get_logger, load_data, save_model, load_params, PROCESSED_DATA_DIR
 
 
 def train_model(
@@ -50,10 +50,11 @@ def model_building() -> None:
     logger = get_logger(__file__)
 
     try:
-        params = {
-            "n_estimators":  22,
-            "random_state":  2
-        }
+        params = load_params()['model_building']
+        # params = {
+        #     "n_estimators":  22,
+        #     "random_state":  2
+        # }
 
         train_data = load_data(PROCESSED_DATA_DIR / "train_tfidf.csv")
         X_train = train_data.iloc[:, :-1].to_numpy()

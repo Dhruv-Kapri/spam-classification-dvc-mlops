@@ -2,17 +2,19 @@ import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 
-from pipeline.utils import get_logger, load_data, clean_schema, save_data, EXPERIMENTS_DIR
+from pipeline.utils import get_logger, load_data, clean_schema, save_data, load_params, EXPERIMENTS_DIR
 
 
 def data_ingestion():
     logger = get_logger(__file__)
 
     try:
-        test_size = 0.2
+        params = load_params()
+        test_size = params['data_ingestion']['test_size']
+        # test_size = 0.2
 
-        # data_path = '../experiments/spam.csv'
-        data_path = EXPERIMENTS_DIR / "spam.csv"
+        data_path = 'https://raw.githubusercontent.com/Dhruv-Kapri/spam-classification-dvc-mlops/refs/heads/main/experiments/spam.csv'
+        # data_path = EXPERIMENTS_DIR / "spam.csv"
 
         df = load_data(data_path)
         final_df = clean_schema(df)

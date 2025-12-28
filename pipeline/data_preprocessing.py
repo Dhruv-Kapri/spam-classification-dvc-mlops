@@ -1,7 +1,6 @@
 import pandas as pd
 import nltk
 import string
-from pathlib import Path
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from sklearn.preprocessing import LabelEncoder
@@ -50,9 +49,14 @@ def process_data(
         test_df = test_df.drop_duplicates(keep='first')
         logger.debug('Duplicates removed')
 
-        train_df[target_column] = encoder.fit_transform(
-            train_df[target_column])
-        test_df[target_column] = encoder.transform(test_df[target_column])
+        train_df.loc[:, target_column] = pd.Series(
+            encoder.fit_transform(train_df[target_column]),
+            index=train_df.index,
+        )
+        test_df.loc[:, target_column] = pd.Series(
+            encoder.transform(test_df[target_column]),
+            index=test_df.index,
+        )
         logger.debug('Target column encoded')
 
         # Apply text transformation to the specified text column

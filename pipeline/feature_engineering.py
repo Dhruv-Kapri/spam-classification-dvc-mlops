@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from pipeline.utils import get_logger, load_data, save_data, INTERIM_DATA_DIR
+from pipeline.utils import get_logger, load_data, save_data, load_params, INTERIM_DATA_DIR
 
 
 def apply_tfidf(
@@ -49,7 +49,9 @@ def feature_engineering() -> None:
     logger = get_logger(__file__)
 
     try:
-        max_features = 50
+        params = load_params()
+        max_features = params['feature_engineering']['max_features']
+        # max_features = 50
 
         train_data = load_data(INTERIM_DATA_DIR / "train.csv")
         test_data = load_data(INTERIM_DATA_DIR / "test.csv")
