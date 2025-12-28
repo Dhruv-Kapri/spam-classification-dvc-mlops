@@ -6,7 +6,7 @@ from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from sklearn.preprocessing import LabelEncoder
 
-from pipeline.utils import get_logger, load_data, save_data
+from pipeline.utils import get_logger, load_data, save_data, RAW_DATA_DIR
 
 ps = PorterStemmer()
 STOPWORDS = set(stopwords.words("english"))
@@ -83,11 +83,8 @@ def data_preprocessing(
     logger = get_logger(__file__)
 
     try:
-        project_root = Path(__file__).resolve().parents[1]
-        data_path = project_root / "data" / "raw"
-
-        train_data = load_data(data_path / "train.csv")
-        test_data = load_data(data_path / "test.csv")
+        train_data = load_data(RAW_DATA_DIR / "train.csv")
+        test_data = load_data(RAW_DATA_DIR / "test.csv")
         logger.debug('Loaded data for Preprocessing')
 
         # Transform the data

@@ -2,7 +2,8 @@ import pandas as pd
 from pathlib import Path
 from typing import Optional
 
-from pipeline.utils import get_logger
+from pipeline.utils.logger import get_logger
+from pipeline.utils.paths import DATA_DIR
 
 
 def load_data(data_url: str | Path) -> pd.DataFrame:
@@ -57,12 +58,11 @@ def save_data(
     logger = get_logger(__file__)
 
     try:
-        # Resolve project root
-        project_root = Path(__file__).resolve().parents[2]
-
-        data_dir = project_root / "data"
-        if sub_folder:
-            data_dir = data_dir / sub_folder
+        data_dir = (
+            DATA_DIR / sub_folder
+            if sub_folder
+            else DATA_DIR
+        )
 
         data_dir.mkdir(parents=True, exist_ok=True)
 

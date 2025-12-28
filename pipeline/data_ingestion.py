@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 
-from pipeline.utils import get_logger, load_data, clean_schema, save_data
+from pipeline.utils import get_logger, load_data, clean_schema, save_data, EXPERIMENTS_DIR
 
 
 def data_ingestion():
@@ -12,8 +12,7 @@ def data_ingestion():
         test_size = 0.2
 
         # data_path = '../experiments/spam.csv'
-        project_root = Path(__file__).resolve().parents[1]
-        data_path = project_root / "experiments" / "spam.csv"
+        data_path = EXPERIMENTS_DIR / "spam.csv"
 
         df = load_data(data_path)
         final_df = clean_schema(df)

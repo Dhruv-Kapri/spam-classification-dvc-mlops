@@ -1,6 +1,8 @@
 from pathlib import Path
 import logging
 
+from pipeline.utils.paths import LOGS_DIR
+
 
 def get_logger(
         file_path: str,
@@ -17,14 +19,11 @@ def get_logger(
         logging.Logger
     """
 
-    # Resolve project root
-    PROJECT_ROOT = Path(__file__).resolve().parents[2]
-    LOG_DIR = PROJECT_ROOT / "logs"
-    LOG_DIR.mkdir(exist_ok=True)
+    LOGS_DIR.mkdir(exist_ok=True)
 
     # Module name from file
     module_name = Path(file_path).stem  # data_ingestion.py → data_ingestion
-    log_file = LOG_DIR / f"{module_name}.log"
+    log_file = LOGS_DIR / f"{module_name}.log"
 
     logger = logging.getLogger(module_name)
 
