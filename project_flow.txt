@@ -1,43 +1,91 @@
-Building Pipeline:
-1> Create a GitHub repo and clone it in local (Add experiments).
-2> Add src folder along with all components(run them individually).
-3> Add data, models, reports directories to .gitignore file
-4> Now git add, commit, push
+PROJECT FLOW – DVC + MLOps PIPELINE
+=================================
 
-Setting up dcv pipeline (without params)
-5> Create dvc.yaml file and add stages to it.
-6> dvc init then do "dvc repro" to test the pipeline automation. (check dvc dag)
-7> Now git add, commit, push
+1. Repository & Initial Setup
+------------------------------
+1.1 Create a GitHub repository and clone it locally  
+1.2 Add the source (`pipeline/`) code with all modular components  
+    - Run each component independently to validate correctness  
+1.3 Add `data/`, `models/`, and `reports/` to `.gitignore`  
+1.4 Git add, commit, and push the initial setup
 
-Setting up dcv pipeline (with params)
-8> add params.yaml file
-9> Add the params setup (mentioned below)
-10> Do "dvc repro" again to test the pipeline along with the params
-11> Now git add, commit, push
 
-Expermients with DVC:
-12> pip install dvclive
-13> Add the dvclive code block (mentioned below) - only to the evaluations module
-14> Do "dvc exp run", it will create a new dvc.yaml(if already not there) and dvclive directory (each run will be considered as an experiment by DVC)
-15> Do "dvc exp show" on terminal to see the experiments or use extension on VSCode (install dvc extension)
-16> Do "dvc exp remove {exp-name}" to remove exp (optional) | "dvc exp apply {exp-name}" to reproduce prev exp
-17> Change params, re-run code (produce new experiments)
-18> Now git add, commit, push
+2. DVC Pipeline Setup (Without Parameters)
+------------------------------------------
+2.1 Create `dvc.yaml` and define pipeline stages  
+2.2 Initialize DVC using `dvc init`  
+2.3 Run `dvc repro` to verify pipeline automation  
+2.4 Inspect the pipeline DAG using `dvc dag`  
+2.5 Git add, commit, and push DVC pipeline setup
 
-Adding a remote S3 storage to DVC:
-19> Login to AWS console
-20> Create an IAM user
-21> Create S3
-    ```bash
-    22> pip install dvc[s3]
-    23> pip install awscli
-    24> aws configure
-    25> dvc remote add -d dvcstore s3://<bucketname>
-    26> dvc commit-push
+
+3. DVC Pipeline Setup (With Parameters)
+---------------------------------------
+3.1 Add `params.yaml` for pipeline configuration  
+3.2 Update pipeline code and `dvc.yaml` to consume parameters  
+3.3 Run `dvc repro` to validate parameterized execution  
+3.4 Git add, commit, and push parameterized pipeline changes
+
+
+4. Experiment Tracking with DVC & dvclive
+-----------------------------------------
+4.1 Add dvclive logging **only in the model evaluation stage**  
+    - Log metrics and parameters  
+    - Keep upstream pipeline stages deterministic  
+
+4.2 Run experiments using:
     ```
-27> Now git add, commit, push
+    dvc exp run
+    ```
 
-Delete AWS resources
-28> empty bucketname
-29> Delete s3 bucket
-30> Optional --> Delete IAM user
+4.3 View experiments using:
+    ```
+    dvc exp show
+    ```
+    - Or via the DVC VS Code extension
+
+4.4 Manage experiments (optional):
+    - Remove an experiment:
+      ```
+      dvc exp remove <exp-name>
+      ```
+    - Reproduce a previous experiment:
+      ```
+      dvc exp apply <exp-name>
+      ```
+
+4.5 Modify parameters and rerun experiments to generate new results  
+4.6 Git add, commit, and push experiment-related changes
+
+
+5. Remote Storage with AWS S3
+-----------------------------
+5.1 Log in to the AWS Console  
+5.2 Create an IAM user with S3 access  
+5.3 Create an S3 bucket for DVC remote storage  
+
+5.4 Configure AWS credentials:
+    ```
+    aws configure
+    ```
+
+5.5 Add S3 as the default DVC remote:
+    ```
+    dvc remote add -d dvcstore s3://<bucket-name>
+    ```
+
+5.6 Upload DVC-tracked data and artifacts:
+    ```
+    dvc exp apply <exp-name>
+    dvc commit
+    dvc push
+    ```
+
+5.7 Git add, commit, and push DVC remote configuration
+
+
+6. Cleanup AWS Resources (Optional)
+-----------------------------------
+6.1 Empty the S3 bucket  
+6.2 Delete the S3 bucket  
+6.3 Optionally delete the IAM user

@@ -1,8 +1,8 @@
 # Spam Classification using DVC & MLOps
 
-AAn **end-to-end spam classification ML pipeline** built with **modular Python code**, **DVC for data & experiment versioning**, and **Git-based workflows**.
-  
-The project emphasizes **reproducibility, automation, and MLOps practices** over raw model performance.
+An **end-to-end spam classification ML pipeline** built with **modular Python code**, **DVC for data & experiment versioning**, **AWS s3 for storage**, and **Git-based workflows**.
+
+The project emphasizes **reproducibility, automation, experiment tracking, and MLOps best practices** over raw model performance.
 
 <!-- --- -->
 
@@ -18,6 +18,7 @@ This repository demonstrates a **production-style ML workflow** including:
 - Parameterized pipelines using `params.yaml`
 - Automated execution and experiment tracking using **DVC**
 - Experiment tracking and visualization using **dvclive**
+- Remote storage of data, models, and metrics using **AWS S3**
 
 <!-- --- -->
 
@@ -77,7 +78,7 @@ This repository demonstrates a **production-style ML workflow** including:
 4. Model Building  
 5. Model Evaluation (with `dvclive` tracking) 
 
-All stages are automated and reproducible using DVC.
+All stages are automated, parameterized, and reproducible using DVC.
 
 <!-- --- -->
 
@@ -117,3 +118,27 @@ All stages are automated and reproducible using DVC.
   dvc exp apply <exp-name>
   dvc exp remove <exp-name>
   ```
+
+<!-- --- -->
+
+## Remote Storage with AWS S3
+
+This project uses AWS S3 as a DVC remote to store:
+- Versioned datasets
+- Trained models
+- Experiment artifacts
+
+### Setup steps (one-time)
+  ```bash
+  aws configure
+  dvc remote add -d dvcstore s3://<your-bucket-name>
+  ```
+
+### Push data & artifacts to S3
+  ```bash
+  dvc exp apply <experiment-name>
+  dvc commit
+  dvc push
+  ```
+
+Once configured, all DVC-tracked files are automatically synchronized with S3.
